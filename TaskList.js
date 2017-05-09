@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, TouchableHighlight, Text, View, ListView } from 'react-native';
-import TaskRow from './TaskRow';
+import TaskRow from './TaskRow/Component';
 const styles = StyleSheet.create({
     container: {
         paddingTop: 40,
         backgroundColor: '#F7F7F7',
         flex: 1,
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
     },
     button: {
         height: 60,
@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
 
         margin: 20,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     buttonText: {
         color: '#FAFAFA',
         fontSize: 20,
-        fontWeight: '600'
+        fontWeight: '600',
     }
 });
 
@@ -38,9 +38,16 @@ class TaskList extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        const dataSource = this.state.dataSource.cloneWithRows(nextProps.todos);
+        this.setState({dataSource});
+    }
+
     renderRow(todo) {
         return (
-            <TaskRow todo={todo} />
+            <TaskRow 
+                onDone={this.props.onDone}
+                todo={todo} />
         )
     }
     render() {
@@ -62,6 +69,7 @@ class TaskList extends React.Component {
 }
 TaskList.propTypes = {
     onAddStarted: React.PropTypes.func.isRequired,
+    onDone: React.PropTypes.func.isRequired,
     todos: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 };
 export default TaskList;
